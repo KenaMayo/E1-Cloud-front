@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { MsalModule } from '@azure/msal-angular';
 import { HeaderComponent } from './components/header/header.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductosComponent } from './pages/productos/productos.component';
@@ -14,8 +12,6 @@ import { takeUntil } from 'rxjs/operators';
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
-    MsalModule,
     HeaderComponent,
     DashboardComponent,
     ProductosComponent,
