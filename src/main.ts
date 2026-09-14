@@ -31,17 +31,11 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
 
-/*
- * ============================================
- * CONFIGURACIÓN DE MICROSOFT ENTRA ID
- * ============================================
- */
-
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: '${MSAL_CLIENT_ID}',
-      authority: 'https://login.microsoftonline.com/${TENANT_ID}',
+      clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e', /*Solo de front */
+      authority: 'https://login.microsoftonline.com/fc80740a-8501-4d9b-a246-8fbbd7ac5140',
       redirectUri: window.location.origin,
       postLogoutRedirectUri: window.location.origin
     },
@@ -52,12 +46,6 @@ export function MSALInstanceFactory(): IPublicClientApplication {
   });
 }
 
-
-/*
- * ============================================
- * CONFIGURACIÓN DEL GUARD
- * ============================================
- */
 
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
@@ -73,12 +61,6 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   };
 }
 
-
-/*
- * ============================================
- * CONFIGURACIÓN DEL INTERCEPTOR
- * ============================================
- */
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
@@ -108,62 +90,36 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 }
 
 
-/*
- * ============================================
- * ARRANQUE DE ANGULAR
- * ============================================
- */
-
 bootstrapApplication(AppComponent, {
 
   providers: [
 
-    /*
-     * Angular Router
-     */
     provideRouter(routes),
 
-    /*
-     * HttpClient + interceptores
-     */
     provideHttpClient(
       withInterceptorsFromDi()
     ),
 
-    /*
-     * Instancia MSAL
-     */
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
 
-    /*
-     * Configuración del Guard
-     */
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory
     },
-
-    /*
-     * Configuración del Interceptor
-     */
+  
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
     },
 
-    /*
-     * Servicios de MSAL
-     */
     MsalService,
     MsalGuard,
     MsalBroadcastService,
 
-    /*
-     * Interceptor HTTP de MSAL
-     */
+    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
