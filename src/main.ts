@@ -31,11 +31,6 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
@@ -52,10 +47,6 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
@@ -64,21 +55,18 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       scopes: [
         'openid',
         'profile',
-        'email'
+        'email',
+        'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access'
       ]
     }
   };
 }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   const protectedResourceMap = new Map<string, string[]>();
-
+  protectedResourceMap.set('http://localhost:8080/api/v1', ['api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access']);
  
 
   return {
@@ -88,21 +76,12 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 bootstrapApplication(AppComponent, {
 
   providers: [
 
-<<<<<<< HEAD
-   
-    provideRouter(routes),    
-=======
     provideRouter(routes),
 
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     provideHttpClient(
       withInterceptorsFromDi()
     ),
@@ -116,11 +95,7 @@ bootstrapApplication(AppComponent, {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory
     },
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
@@ -129,11 +104,8 @@ bootstrapApplication(AppComponent, {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
-<<<<<<< HEAD
-=======
 
     
->>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
