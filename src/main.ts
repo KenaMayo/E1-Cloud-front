@@ -31,11 +31,7 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
 
-/*
- * ============================================
- * CONFIGURACIÓN DE MICROSOFT ENTRA ID
- * ============================================
- */
+
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -53,11 +49,6 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 
-/*
- * ============================================
- * CONFIGURACIÓN DEL GUARD
- * ============================================
- */
 
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
@@ -74,32 +65,12 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 }
 
 
-/*
- * ============================================
- * CONFIGURACIÓN DEL INTERCEPTOR
- * ============================================
- */
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   const protectedResourceMap = new Map<string, string[]>();
 
-  /*
-   * Por ahora está vacío.
-   *
-   * Más adelante agregaremos aquí:
-   *
-   * API Gateway URL
-   *        ↓
-   * scope de Microsoft Entra
-   *
-   * Ejemplo:
-   *
-   * protectedResourceMap.set(
-   *   'https://xxxxx.execute-api.us-east-1.amazonaws.com/',
-   *   ['api://xxxxx/access_as_user']
-   * );
-   */
+ 
 
   return {
     interactionType: InteractionType.Redirect,
@@ -108,62 +79,35 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 }
 
 
-/*
- * ============================================
- * ARRANQUE DE ANGULAR
- * ============================================
- */
 
 bootstrapApplication(AppComponent, {
 
   providers: [
 
-    /*
-     * Angular Router
-     */
-    provideRouter(routes),
-
-    /*
-     * HttpClient + interceptores
-     */
+   
+    provideRouter(routes),    
     provideHttpClient(
       withInterceptorsFromDi()
     ),
 
-    /*
-     * Instancia MSAL
-     */
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
 
-    /*
-     * Configuración del Guard
-     */
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory
     },
 
-    /*
-     * Configuración del Interceptor
-     */
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
     },
 
-    /*
-     * Servicios de MSAL
-     */
     MsalService,
     MsalGuard,
     MsalBroadcastService,
-
-    /*
-     * Interceptor HTTP de MSAL
-     */
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
