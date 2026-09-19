@@ -31,13 +31,16 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: '${MSAL_CLIENT_ID}',
-      authority: 'https://login.microsoftonline.com/${TENANT_ID}',
+      clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e', /*Solo de front */
+      authority: 'https://login.microsoftonline.com/fc80740a-8501-4d9b-a246-8fbbd7ac5140',
       redirectUri: window.location.origin,
       postLogoutRedirectUri: window.location.origin
     },
@@ -49,7 +52,10 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
@@ -65,7 +71,10 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   const protectedResourceMap = new Map<string, string[]>();
@@ -79,13 +88,21 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
 bootstrapApplication(AppComponent, {
 
   providers: [
 
+<<<<<<< HEAD
    
     provideRouter(routes),    
+=======
+    provideRouter(routes),
+
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     provideHttpClient(
       withInterceptorsFromDi()
     ),
@@ -99,7 +116,11 @@ bootstrapApplication(AppComponent, {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory
     },
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
@@ -108,6 +129,11 @@ bootstrapApplication(AppComponent, {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
+<<<<<<< HEAD
+=======
+
+    
+>>>>>>> 93e739eccd955a15cdcca4e20eae86748361c848
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
