@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MsalService } from '@azure/msal-angular';
+import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +15,7 @@ import { MsalService } from '@azure/msal-angular';
 
         <h1>🐕 Tienda de Perritos - Cloud Native</h1>
 
-        <nav class="nav">
+        <nav class="nav" *ngIf="isLoggedIn">
           <button class="nav-btn" routerLink="/dashboard" routerLinkActive="active">
             Dashboard
           </button>
@@ -32,7 +34,11 @@ import { MsalService } from '@azure/msal-angular';
             {{ userEmail }}
           </span>
 
-          <button class="logout-btn" (click)="logout()">
+          <button *ngIf="!isLoggedIn" class="login-btn" (click)="login()">
+            Iniciar sesión
+          </button>
+
+          <button *ngIf="isLoggedIn" class="logout-btn" (click)="logout()">
             Logout
           </button>
         </div>
@@ -68,6 +74,7 @@ import { MsalService } from '@azure/msal-angular';
     }
 
     .nav-btn,
+    .login-btn,
     .logout-btn {
       padding: 0.5rem 1rem;
       border: none;
@@ -81,6 +88,7 @@ import { MsalService } from '@azure/msal-angular';
 
     .nav-btn:hover,
     .nav-btn.active,
+    .login-btn:hover,
     .logout-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
@@ -99,23 +107,43 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private authService: MsalService,
+    private broadcastService: MsalBroadcastService,
     private router: Router,
   ) {}
 
   ngOnInit(): void {
+    this.updateAccount();
+
+    this.broadcastService.inProgress$
+      .pipe(filter((status) => status === InteractionStatus.None))
+      .subscribe(() => this.updateAccount());
+  }
+
+  private updateAccount(): void {
     const accounts = this.authService.instance.getAllAccounts();
 
-    if (accounts.length > 0) {
-      this.isLoggedIn = true;
-      this.userEmail = accounts[0].username;
-    }
+    this.isLoggedIn = accounts.length > 0;
+    this.userEmail = accounts[0]?.username ?? '';
   }
 
   navigate(page: string): void {
     this.router.navigate([`/${page}`]);
   }
 
+  login(): void {
+    this.authService.loginRedirect({
+      prompt: 'select_account',
+      scopes: ['openid', 'profile', 'email', 'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access']
+    }).subscribe();
+  }
+
   logout(): void {
-    this.authService.logoutRedirect();
+    const account = this.authService.instance.getActiveAccount()
+      ?? this.authService.instance.getAllAccounts()[0];
+
+    this.authService.logoutRedirect({
+      account: account ?? undefined,
+      postLogoutRedirectUri: window.location.origin
+    }).subscribe();
   }
 }

@@ -76,43 +76,35 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 }
 
 
-bootstrapApplication(AppComponent, {
+const msalInstance = MSALInstanceFactory();
 
-  providers: [
-
-    provideRouter(routes),
-
-    provideHttpClient(
-      withInterceptorsFromDi()
-    ),
-
-    {
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
-    },
-
-    {
-      provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory
-    },
-  
-    {
-      provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory
-    },
-
-    MsalService,
-    MsalGuard,
-    MsalBroadcastService,
-
-    
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
-    }
-
-  ]
-
-})
-.catch(err => console.error(err));
+msalInstance.initialize()
+  .then(() => bootstrapApplication(AppComponent, {
+    providers: [
+      provideRouter(routes),
+      provideHttpClient(
+        withInterceptorsFromDi()
+      ),
+      {
+        provide: MSAL_INSTANCE,
+        useValue: msalInstance
+      },
+      {
+        provide: MSAL_GUARD_CONFIG,
+        useFactory: MSALGuardConfigFactory
+      },
+      {
+        provide: MSAL_INTERCEPTOR_CONFIG,
+        useFactory: MSALInterceptorConfigFactory
+      },
+      MsalService,
+      MsalGuard,
+      MsalBroadcastService,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: MsalInterceptor,
+        multi: true
+      }
+    ]
+  }))
+  .catch(err => console.error(err));
