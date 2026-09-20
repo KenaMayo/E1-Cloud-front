@@ -1,29 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ProductosComponent } from './pages/productos/productos.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
+    RouterOutlet,
     HeaderComponent,
-    DashboardComponent,
-    ProductosComponent,
-    UsuariosComponent,
   ],
   template: `
     <app-header></app-header>
     <main>
       <div class="container">
-        <app-dashboard *ngIf="currentPage === 'dashboard'"></app-dashboard>
-        <app-productos *ngIf="currentPage === 'productos'"></app-productos>
-        <app-usuarios *ngIf="currentPage === 'usuarios'"></app-usuarios>
+        <router-outlet></router-outlet>
       </div>
     </main>
   `,
@@ -43,14 +35,4 @@ import { takeUntil } from 'rxjs/operators';
     }
   `]
 })
-export class AppComponent implements OnInit, OnDestroy {
-  currentPage = 'dashboard';
-  private destroy$ = new Subject<void>();
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-}
+export class AppComponent {}

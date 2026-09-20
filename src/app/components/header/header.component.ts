@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
     <header class="header">
       <div class="header-content">
@@ -13,15 +14,15 @@ import { MsalService } from '@azure/msal-angular';
         <h1>🐕 Tienda de Perritos - Cloud Native</h1>
 
         <nav class="nav">
-          <button class="nav-btn" (click)="navigate('dashboard')">
+          <button class="nav-btn" routerLink="/dashboard" routerLinkActive="active">
             Dashboard
           </button>
 
-          <button class="nav-btn" (click)="navigate('productos')">
+          <button class="nav-btn" routerLink="/productos" routerLinkActive="active">
             Productos
           </button>
 
-          <button class="nav-btn" (click)="navigate('usuarios')">
+          <button class="nav-btn" routerLink="/usuarios" routerLinkActive="active">
             Usuarios
           </button>
         </nav>
@@ -79,6 +80,7 @@ import { MsalService } from '@azure/msal-angular';
     }
 
     .nav-btn:hover,
+    .nav-btn.active,
     .logout-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
@@ -95,7 +97,10 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   userEmail = '';
 
-  constructor(private authService: MsalService) {}
+  constructor(
+    private authService: MsalService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     const accounts = this.authService.instance.getAllAccounts();
@@ -107,8 +112,7 @@ export class HeaderComponent implements OnInit {
   }
 
   navigate(page: string): void {
-    // La navegación la configuraremos con Angular Router.
-    console.log('Navegando a:', page);
+    this.router.navigate([`/${page}`]);
   }
 
   logout(): void {
