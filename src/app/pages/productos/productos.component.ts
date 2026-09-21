@@ -38,7 +38,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
             <td>{{ p.stock }}</td>
             <td>
               <button (click)="editar(p)" class="btn-sm btn-edit">Editar</button>
-              <button (click)="eliminar(p.id!)" class="btn-sm btn-danger">Eliminar</button>
+              <button (click)="solicitarEliminacion(p)" class="btn-sm btn-danger">Eliminar</button>
             </td>
           </tr>
         </tbody>
@@ -66,6 +66,20 @@ import { ProductoService, Producto } from '../../services/producto.service';
           <div class="form-actions">
             <button (click)="guardar()" class="btn-primary">Guardar</button>
             <button (click)="mostrarFormulario = false" class="btn-secondary">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="productoAEliminar" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmar-eliminacion-titulo">
+        <div class="modal-content confirmation-content">
+          <h3 id="confirmar-eliminacion-titulo">Eliminar producto</h3>
+          <p>
+            ¿Estás seguro de que deseas eliminar
+            <strong>{{ productoAEliminar.nombre }}</strong>?
+          </p>
+          <div class="form-actions confirmation-actions">
+            <button (click)="cancelarEliminacion()" class="btn-secondary">Cancelar</button>
+            <button (click)="confirmarEliminacion()" class="btn-danger">Eliminar</button>
           </div>
         </div>
       </div>
@@ -115,6 +129,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
     .btn-success { background: #16a34a; color: white; }
     .btn-edit { background: #2563eb; color: white; }
     .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #b91c1c; }
     .btn-sm { padding: 4px 8px; font-size: 0.85rem; }
     .modal {
       position: fixed;
@@ -135,6 +150,9 @@ import { ProductoService, Producto } from '../../services/producto.service';
       max-width: 500px;
       width: 90%;
     }
+    .confirmation-content { max-width: 420px; }
+    .confirmation-content p { color: #4b5563; line-height: 1.5; }
+    .confirmation-actions { justify-content: flex-end; }
     .form-group {
       margin-bottom: 15px;
     }
@@ -165,6 +183,7 @@ export class ProductosComponent implements OnInit {
   filtro = '';
   mostrarFormulario = false;
   editando = false;
+  productoAEliminar: Producto | null = null;
   error = '';
   mensaje = '';
 
@@ -218,16 +237,33 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  eliminar(id: number): void {
-    if (confirm('¿Eliminar este producto?')) {
-      this.productoService.eliminar(id).subscribe({
-        next: () => {
-          this.mensaje = 'Producto eliminado';
-          this.cargarTodos();
-          setTimeout(() => this.mensaje = '', 3000);
-        },
-        error: (err) => this.error = 'Error eliminando producto',
-      });
+  solicitarEliminacion(producto: Producto): void {
+    this.productoAEliminar = producto;
+  }
+
+  cancelarEliminacion(): void {
+    this.productoAEliminar = null;
+  }
+
+  confirmarEliminacion(): void {
+    const producto = this.productoAEliminar;
+
+    if (!producto?.id) {
+      this.cancelarEliminacion();
+      return;
     }
+
+    this.productoService.eliminar(producto.id).subscribe({
+      next: () => {
+        this.productoAEliminar = null;
+        this.mensaje = 'Producto eliminado';
+        this.cargarTodos();
+        setTimeout(() => this.mensaje = '', 3000);
+      },
+      error: (err) => {
+        this.productoAEliminar = null;
+        this.error = 'Error eliminando producto';
+      },
+    });
   }
 }
