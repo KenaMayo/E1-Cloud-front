@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductoService, Producto } from '../../services/producto.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-productos',
@@ -15,7 +16,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
         <input [(ngModel)]="filtro" placeholder="Buscar por nombre..." class="search">
         <button (click)="buscar()" class="btn-primary">Buscar</button>
         <button (click)="cargarTodos()" class="btn-secondary">Mostrar Todos</button>
-        <button (click)="nuevo()" class="btn-success">+ Nuevo Producto</button>
+        <button (click)="nuevo()" *ngIf="esAdmin" class="btn-success">+ Nuevo Producto</button>
       </div>
 
       <table>
@@ -26,7 +27,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
             <th>Descripción</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Acciones</th>
+            <th *ngIf="esAdmin">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +37,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
             <td>{{ p.descripcion }}</td>
             <td>\${{ p.precio }}</td>
             <td>{{ p.stock }}</td>
-            <td>
+            <td *ngIf="esAdmin">
               <button (click)="editar(p)" class="btn-sm btn-edit">Editar</button>
               <button (click)="solicitarEliminacion(p)" class="btn-sm btn-danger">Eliminar</button>
             </td>
@@ -184,12 +185,17 @@ export class ProductosComponent implements OnInit {
   mostrarFormulario = false;
   editando = false;
   productoAEliminar: Producto | null = null;
+  esAdmin = false;
   error = '';
   mensaje = '';
 
-  constructor(private productoService: ProductoService) {}
+  constructor(
+    private productoService: ProductoService,
+    private usuarioService: UsuarioService,
+  ) {}
 
   ngOnInit(): void {
+    this.usuarioService.esAdmin().subscribe((esAdmin) => this.esAdmin = esAdmin);
     this.cargarTodos();
   }
 

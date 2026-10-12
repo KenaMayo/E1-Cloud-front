@@ -5,6 +5,7 @@ import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +26,7 @@ import { environment } from '../../../environments/environment';
             Productos
           </button>
 
-          <button class="nav-btn" routerLink="/usuarios" routerLinkActive="active">
+          <button *ngIf="esAdmin" class="nav-btn" routerLink="/usuarios" routerLinkActive="active">
             Usuarios
           </button>
         </nav>
@@ -104,12 +105,14 @@ import { environment } from '../../../environments/environment';
 export class HeaderComponent implements OnInit {
 
   isLoggedIn = false;
+  esAdmin = false;
   userEmail = '';
 
   constructor(
     private authService: MsalService,
     private broadcastService: MsalBroadcastService,
     private router: Router,
+    private usuarioService: UsuarioService,
   ) {}
 
   ngOnInit(): void {
@@ -125,6 +128,12 @@ export class HeaderComponent implements OnInit {
 
     this.isLoggedIn = accounts.length > 0;
     this.userEmail = accounts[0]?.username ?? '';
+
+    if (this.isLoggedIn) {
+      this.usuarioService.esAdmin().subscribe((esAdmin) => this.esAdmin = esAdmin);
+    } else {
+      this.esAdmin = false;
+    }
   }
 
   navigate(page: string): void {

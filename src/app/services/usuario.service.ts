@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Usuario {
@@ -24,11 +25,20 @@ export class UsuarioService {
   private apiUrl = environment.apiUrl + '/usuarios';
   private authUrl = environment.apiUrl + '/auth';
   private dashboardUrl = environment.apiUrl + '/dashboard';
+  private usuarioActual$?: Observable<Usuario>;
 
   constructor(private http: HttpClient) {}
 
   obtenerUsuarioActual(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/me`);
+  }
+
+  esAdmin(): Observable<boolean> {
+    this.usuarioActual$ ??= this.obtenerUsuarioActual().pipe(shareReplay(1));
+    return this.usuarioActual$.pipe(
+      map((usuario) => (usuario.roles ?? '').split(',').includes('ROLE_ADMIN')),
+      catchError(() => of(false)),
+    );
   }
 
   actualizarUsuarioActual(usuario: Usuario): Observable<Usuario> {
