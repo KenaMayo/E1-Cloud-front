@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -133,7 +134,7 @@ export class HeaderComponent implements OnInit {
   login(): void {
     this.authService.loginRedirect({
       prompt: 'select_account',
-      scopes: ['openid', 'profile', 'email', 'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access']
+      scopes: environment.msal.scopes
     }).subscribe();
   }
 

@@ -29,13 +29,14 @@ import {
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+import { environment } from './environments/environment';
 
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e', /*Solo de front */
-      authority: 'https://login.microsoftonline.com/fc80740a-8501-4d9b-a246-8fbbd7ac5140',
+      clientId: environment.msal.clientId,
+      authority: environment.msal.authority,
       redirectUri: window.location.origin,
       postLogoutRedirectUri: window.location.origin
     },
@@ -52,12 +53,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     interactionType: InteractionType.Redirect,
 
     authRequest: {
-      scopes: [
-        'openid',
-        'profile',
-        'email',
-        'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access'
-      ]
+      scopes: environment.msal.scopes
     }
   };
 }
@@ -66,8 +62,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   const protectedResourceMap = new Map<string, string[]>();
-  protectedResourceMap.set('http://localhost:8080/api/v1', ['api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access']);
- 
+  protectedResourceMap.set(`${environment.apiUrl}/*`, environment.msal.apiScopes);
 
   return {
     interactionType: InteractionType.Redirect,

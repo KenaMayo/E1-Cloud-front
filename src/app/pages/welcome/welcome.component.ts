@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-welcome',
@@ -57,7 +58,7 @@ export class WelcomeComponent implements OnInit {
   login(): void {
     this.authService.loginRedirect({
       prompt: 'select_account',
-      scopes: ['openid', 'profile', 'email', 'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access']
+      scopes: environment.msal.scopes
     }).subscribe();
   }
 }

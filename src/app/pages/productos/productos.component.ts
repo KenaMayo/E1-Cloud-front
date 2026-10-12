@@ -15,7 +15,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
         <input [(ngModel)]="filtro" placeholder="Buscar por nombre..." class="search">
         <button (click)="buscar()" class="btn-primary">Buscar</button>
         <button (click)="cargarTodos()" class="btn-secondary">Mostrar Todos</button>
-        <button (click)="mostrarFormulario = true" class="btn-success">+ Nuevo Producto</button>
+        <button (click)="nuevo()" class="btn-success">+ Nuevo Producto</button>
       </div>
 
       <table>
@@ -65,7 +65,7 @@ import { ProductoService, Producto } from '../../services/producto.service';
           </div>
           <div class="form-actions">
             <button (click)="guardar()" class="btn-primary">Guardar</button>
-            <button (click)="mostrarFormulario = false" class="btn-secondary">Cancelar</button>
+            <button (click)="cerrarFormulario()" class="btn-secondary">Cancelar</button>
           </div>
         </div>
       </div>
@@ -219,6 +219,17 @@ export class ProductosComponent implements OnInit {
     this.formulario = { ...producto };
     this.mostrarFormulario = true;
     this.editando = true;
+  }
+
+  nuevo(): void {
+    this.formulario = { nombre: '', precio: 0, stock: 0 };
+    this.editando = false;
+    this.mostrarFormulario = true;
+  }
+
+  cerrarFormulario(): void {
+    this.mostrarFormulario = false;
+    this.editando = false;
   }
 
   guardar(): void {

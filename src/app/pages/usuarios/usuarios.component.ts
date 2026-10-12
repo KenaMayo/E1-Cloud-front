@@ -13,7 +13,7 @@ import { UsuarioService, Usuario } from '../../services/usuario.service';
 
       <div class="controls">
         <button (click)="cargarTodos()" class="btn-primary">Cargar Usuarios</button>
-        <button (click)="mostrarFormulario = true" class="btn-success">+ Nuevo Usuario</button>
+        <button (click)="nuevo()" class="btn-success">+ Nuevo Usuario</button>
       </div>
 
       <table>
@@ -63,7 +63,7 @@ import { UsuarioService, Usuario } from '../../services/usuario.service';
           </div>
           <div class="form-actions">
             <button (click)="guardar()" class="btn-primary">Guardar</button>
-            <button (click)="mostrarFormulario = false" class="btn-secondary">Cancelar</button>
+            <button (click)="cerrarFormulario()" class="btn-secondary">Cancelar</button>
           </div>
         </div>
       </div>
@@ -138,6 +138,17 @@ export class UsuariosComponent implements OnInit {
     this.formulario = { ...usuario };
     this.mostrarFormulario = true;
     this.editando = true;
+  }
+
+  nuevo(): void {
+    this.formulario = { email: '', nombre: '', apellido: '' };
+    this.editando = false;
+    this.mostrarFormulario = true;
+  }
+
+  cerrarFormulario(): void {
+    this.mostrarFormulario = false;
+    this.editando = false;
   }
 
   guardar(): void {

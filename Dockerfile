@@ -1,14 +1,13 @@
-# Build stage
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 WORKDIR /build
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build:prod
 
-# Runtime stage
-FROM nginx:alpine
-COPY --from=builder /build/dist /usr/share/nginx/html
+FROM nginx:1.27-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /build/dist/tienda-perritos-angular/browser /usr/share/nginx/html
 EXPOSE 80
+HEALTHCHECK --interval=15s --timeout=3s --retries=5 CMD wget -qO /dev/null http://127.0.0.1/ || exit 1
 CMD ["nginx", "-g", "daemon off;"]

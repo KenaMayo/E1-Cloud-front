@@ -1,9 +1,10 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tienda-perritos.com/api/v1',
+  apiUrl: '/api/v1',
   msal: {
-    clientId: 'YOUR_PROD_CLIENT_ID',
-    authority: 'https://login.microsoftonline.com/YOUR_TENANT_ID',
-    redirectUri: 'https://tienda-perritos.com/auth/callback',
+    clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e',
+    authority: 'https://login.microsoftonline.com/fc80740a-8501-4d9b-a246-8fbbd7ac5140',
+    scopes: ['openid', 'profile', 'email', 'api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access'],
+    apiScopes: ['api://db0c2b5d-d0b6-4b59-84b1-4ff4bb15f34d/Access'],
   },
 };
