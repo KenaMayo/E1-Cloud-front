@@ -11,20 +11,20 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^20.1.8",
+    "@angular/animations": "^22.2.2",
     "@angular/common": "^22.2.2",
     "@angular/compiler": "^22.2.2",
     "@angular/core": "^22.2.2",
     "@angular/forms": "^22.2.2",
     "@angular/platform-browser": "^22.2.2",
-    "@angular/platform-browser-dynamic": "^20.0.7",
+    "@angular/platform-browser-dynamic": "^22.2.2",
     "@angular/router": "^22.2.2",
     "@azure/msal-angular": "^3.1.0",
     "@azure/msal-browser": "^3.30.0",
     "@azure/msal-common": "^13.0.0",
     "rxjs": "^7.8.0",
     "tslib": "^2.6.0",
-    "zone.js": "^0.14.0"
+    "zone.js": "^0.16.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.2.2",
@@ -37,6 +37,6 @@
     "karma-coverage": "^2.2.0",
     "karma-jasmine": "^4.0.2",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "typescript": "^5.2.0"
+    "typescript": "~6.0.3"
   }
 }
