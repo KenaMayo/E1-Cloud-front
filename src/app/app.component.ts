@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
-import { MsalService } from '@azure/msal-angular';
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// import { Router, RouterOutlet } from '@angular/router';
+// import { MsalService } from '@azure/msal-angular';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -37,21 +41,23 @@ import { HeaderComponent } from './components/header/header.component';
     }
   `]
 })
-export class AppComponent implements OnInit {
-  constructor(
-    private authService: MsalService,
-    private router: Router,
-  ) {}
-
-  ngOnInit(): void {
-    this.authService.handleRedirectObservable().subscribe({
-      next: (result) => {
-        if (result?.account) {
-          this.authService.instance.setActiveAccount(result.account);
-          this.router.navigate(['/dashboard']);
-        }
-      },
-      error: (error) => console.error('Error procesando el inicio de sesión:', error)
-    });
-  }
-}
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// export class AppComponent implements OnInit {
+//   constructor(
+//     private authService: MsalService,
+//     private router: Router,
+//   ) {}
+//
+//   ngOnInit(): void {
+//     this.authService.handleRedirectObservable().subscribe({
+//       next: (result) => {
+//         if (result?.account) {
+//           this.authService.instance.setActiveAccount(result.account);
+//           this.router.navigate(['/dashboard']);
+//         }
+//       },
+//       error: (error) => console.error('Error procesando el inicio de sesión:', error)
+//     });
+//   }
+// }
+export class AppComponent {}

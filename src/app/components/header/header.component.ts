@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
-import { InteractionStatus } from '@azure/msal-browser';
-import { filter } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+// import { InteractionStatus } from '@azure/msal-browser';
+// import { filter } from 'rxjs/operators';
+// import { environment } from '../../../environments/environment';
 import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
     <header class="header">
@@ -36,6 +38,7 @@ import { UsuarioService } from '../../services/usuario.service';
             {{ userEmail }}
           </span>
 
+          <!-- [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
           <button *ngIf="!isLoggedIn" class="login-btn" (click)="login()">
             Iniciar sesión
           </button>
@@ -43,6 +46,7 @@ import { UsuarioService } from '../../services/usuario.service';
           <button *ngIf="isLoggedIn" class="logout-btn" (click)="logout()">
             Logout
           </button>
+          -->
         </div>
 
       </div>
@@ -104,56 +108,67 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class HeaderComponent implements OnInit {
 
-  isLoggedIn = false;
+  // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+  // isLoggedIn = false;
+  isLoggedIn = true;
   esAdmin = false;
   userEmail = '';
 
   constructor(
-    private authService: MsalService,
-    private broadcastService: MsalBroadcastService,
+    // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+    // private authService: MsalService,
+    // private broadcastService: MsalBroadcastService,
     private router: Router,
     private usuarioService: UsuarioService,
   ) {}
 
   ngOnInit(): void {
-    this.updateAccount();
-
-    this.broadcastService.inProgress$
-      .pipe(filter((status) => status === InteractionStatus.None))
-      .subscribe(() => this.updateAccount());
+    // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+    // this.updateAccount();
+    //
+    // this.broadcastService.inProgress$
+    //   .pipe(filter((status) => status === InteractionStatus.None))
+    //   .subscribe(() => this.updateAccount());
+    this.usuarioService.obtenerUsuarioActual().subscribe({
+      next: (usuario) => this.userEmail = usuario.email,
+      error: () => this.userEmail = '',
+    });
+    this.usuarioService.esAdmin().subscribe((esAdmin) => this.esAdmin = esAdmin);
   }
 
-  private updateAccount(): void {
-    const accounts = this.authService.instance.getAllAccounts();
-
-    this.isLoggedIn = accounts.length > 0;
-    this.userEmail = accounts[0]?.username ?? '';
-
-    if (this.isLoggedIn) {
-      this.usuarioService.esAdmin().subscribe((esAdmin) => this.esAdmin = esAdmin);
-    } else {
-      this.esAdmin = false;
-    }
-  }
+  // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+  // private updateAccount(): void {
+  //   const accounts = this.authService.instance.getAllAccounts();
+  //
+  //   this.isLoggedIn = accounts.length > 0;
+  //   this.userEmail = accounts[0]?.username ?? '';
+  //
+  //   if (this.isLoggedIn) {
+  //     this.usuarioService.esAdmin().subscribe((esAdmin) => this.esAdmin = esAdmin);
+  //   } else {
+  //     this.esAdmin = false;
+  //   }
+  // }
 
   navigate(page: string): void {
     this.router.navigate([`/${page}`]);
   }
 
-  login(): void {
-    this.authService.loginRedirect({
-      prompt: 'select_account',
-      scopes: environment.msal.scopes
-    }).subscribe();
-  }
-
-  logout(): void {
-    const account = this.authService.instance.getActiveAccount()
-      ?? this.authService.instance.getAllAccounts()[0];
-
-    this.authService.logoutRedirect({
-      account: account ?? undefined,
-      postLogoutRedirectUri: window.location.origin
-    }).subscribe();
-  }
+  // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+  // login(): void {
+  //   this.authService.loginRedirect({
+  //     prompt: 'select_account',
+  //     scopes: environment.msal.scopes
+  //   }).subscribe();
+  // }
+  //
+  // logout(): void {
+  //   const account = this.authService.instance.getActiveAccount()
+  //     ?? this.authService.instance.getAllAccounts()[0];
+  //
+  //   this.authService.logoutRedirect({
+  //     account: account ?? undefined,
+  //     postLogoutRedirectUri: window.location.origin
+  //   }).subscribe();
+  // }
 }

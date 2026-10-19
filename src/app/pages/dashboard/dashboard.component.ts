@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService, Dashboard } from '../../services/usuario.service';
 import { ProductoService } from '../../services/producto.service';
@@ -6,6 +6,7 @@ import { ProductoService } from '../../services/producto.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule],
   template: `
     <div class="dashboard">

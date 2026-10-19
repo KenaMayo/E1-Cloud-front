@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductoService, Producto } from '../../services/producto.service';
@@ -7,6 +7,7 @@ import { UsuarioService } from '../../services/usuario.service';
 @Component({
   selector: 'app-productos',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="productos">

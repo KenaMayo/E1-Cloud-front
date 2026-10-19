@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MsalService } from '@azure/msal-angular';
-import { environment } from '../../../environments/environment';
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// import { MsalService } from '@azure/msal-angular';
+// import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-welcome',
@@ -10,9 +11,13 @@ import { environment } from '../../../environments/environment';
   imports: [CommonModule],
   template: `
     <section class="welcome">
+      <h2>Bienvenido a la Tienda de Perritos</h2>
+      <p>Redirigiendo al dashboard...</p>
+      <!-- [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
       <h2>Para ver información, inicie sesión</h2>
       <p>Acceda a la tienda para consultar el dashboard, los productos y los usuarios.</p>
       <button class="login-button" (click)="login()">Iniciar sesión</button>
+      -->
     </section>
   `,
   styles: [`
@@ -45,20 +50,24 @@ import { environment } from '../../../environments/environment';
 })
 export class WelcomeComponent implements OnInit {
   constructor(
-    private authService: MsalService,
+    // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+    // private authService: MsalService,
     private router: Router,
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.instance.getAllAccounts().length > 0) {
-      this.router.navigate(['/dashboard']);
-    }
+    // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+    // if (this.authService.instance.getAllAccounts().length > 0) {
+    //   this.router.navigate(['/dashboard']);
+    // }
+    this.router.navigate(['/dashboard']);
   }
 
-  login(): void {
-    this.authService.loginRedirect({
-      prompt: 'select_account',
-      scopes: environment.msal.scopes
-    }).subscribe();
-  }
+  // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+  // login(): void {
+  //   this.authService.loginRedirect({
+  //     prompt: 'select_account',
+  //     scopes: environment.msal.scopes
+  //   }).subscribe();
+  // }
 }

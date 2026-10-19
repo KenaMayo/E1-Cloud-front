@@ -1,5 +1,25 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideZoneChangeDetection } from '@angular/core';
+
+import { AppComponent } from './app/app.component';
+import { routes } from './app/app.routes';
+
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// Los componentes actualizan campos planos (no signals): se requiere detección de cambios basada en zone.js
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection(),
+    provideRouter(routes),
+    provideHttpClient(),
+  ]
+}).catch(err => console.error(err));
+
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+/*
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -103,3 +123,4 @@ msalInstance.initialize()
     ]
   }))
   .catch(err => console.error(err));
+*/
