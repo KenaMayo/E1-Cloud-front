@@ -46,6 +46,14 @@ import { UsuarioService, Usuario } from '../../services/usuario.service';
       <div *ngIf="mostrarFormulario" class="modal">
         <div class="modal-content">
           <h3>{{ editando ? 'Editar' : 'Nuevo' }} Usuario</h3>
+          <div class="form-group" *ngIf="!editando">
+            <label>Usuario</label>
+            <input [(ngModel)]="formulario.username" placeholder="username" autocomplete="off">
+          </div>
+          <div class="form-group" *ngIf="!editando">
+            <label>Contraseña (6 a 72 caracteres)</label>
+            <input [(ngModel)]="formulario.password" type="password" placeholder="Contraseña" autocomplete="new-password">
+          </div>
           <div class="form-group">
             <label>Email</label>
             <input [(ngModel)]="formulario.email" type="email" placeholder="usuario@example.com" [disabled]="editando">

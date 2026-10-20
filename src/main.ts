@@ -1,18 +1,23 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+import { AuthService } from './app/services/auth.service';
+import { authInterceptor } from './app/services/auth.interceptor';
 
-// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
+// Login por base de datos (JWT propio). Al arrancar se valida el token guardado con /auth/me.
+// [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft (configuración MSAL al final del archivo)
 // Los componentes actualizan campos planos (no signals): se requiere detección de cambios basada en zone.js
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideAppInitializer(() => firstValueFrom(inject(AuthService).validarSesion())),
   ]
 }).catch(err => console.error(err));
 

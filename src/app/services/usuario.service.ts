@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface Usuario {
   id?: number;
+  username?: string;
+  password?: string;
   email: string;
   nombre: string;
   apellido: string;
   roles?: string;
+  rol?: string;
 }
 
 export interface Dashboard {
@@ -25,20 +29,16 @@ export class UsuarioService {
   private apiUrl = environment.apiUrl + '/usuarios';
   private authUrl = environment.apiUrl + '/auth';
   private dashboardUrl = environment.apiUrl + '/dashboard';
-  private usuarioActual$?: Observable<Usuario>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   obtenerUsuarioActual(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/me`);
   }
 
+  // Solo visual: la protección real está en el backend
   esAdmin(): Observable<boolean> {
-    this.usuarioActual$ ??= this.obtenerUsuarioActual().pipe(shareReplay(1));
-    return this.usuarioActual$.pipe(
-      map((usuario) => (usuario.roles ?? '').split(',').includes('ROLE_ADMIN')),
-      catchError(() => of(false)),
-    );
+    return this.auth.sesion$.pipe(map((sesion) => sesion?.rol === 'ADMIN'));
   }
 
   actualizarUsuarioActual(usuario: Usuario): Observable<Usuario> {

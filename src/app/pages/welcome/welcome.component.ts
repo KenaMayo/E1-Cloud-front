@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
 // import { MsalService } from '@azure/msal-angular';
 // import { environment } from '../../../environments/environment';
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
   template: `
     <section class="welcome">
       <h2>Bienvenido a la Tienda de Perritos</h2>
-      <p>Redirigiendo al dashboard...</p>
+      <p>Inicie sesión (botón superior derecho) para ver el dashboard. Los productos se pueden consultar sin sesión.</p>
       <!-- [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
       <h2>Para ver información, inicie sesión</h2>
       <p>Acceda a la tienda para consultar el dashboard, los productos y los usuarios.</p>
@@ -53,6 +54,7 @@ export class WelcomeComponent implements OnInit {
     // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
     // private authService: MsalService,
     private router: Router,
+    private auth: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +62,9 @@ export class WelcomeComponent implements OnInit {
     // if (this.authService.instance.getAllAccounts().length > 0) {
     //   this.router.navigate(['/dashboard']);
     // }
-    this.router.navigate(['/dashboard']);
+    if (this.auth.sesion) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
