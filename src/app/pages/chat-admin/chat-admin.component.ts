@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChatConversation, ChatMessage, ChatService } from '../../services/chat.service';
@@ -7,6 +7,7 @@ import { ChatConversation, ChatMessage, ChatService } from '../../services/chat.
 @Component({
   selector: 'app-chat-admin',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, FormsModule],
   template: `
     <section class="admin-chat">
