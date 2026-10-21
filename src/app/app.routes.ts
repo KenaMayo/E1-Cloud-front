@@ -9,6 +9,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductosComponent } from './pages/productos/productos.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { ChatAdminComponent } from './pages/chat-admin/chat-admin.component';
 import { authGuard } from './services/auth.guard';
 import { UsuarioService } from './services/usuario.service';
 
@@ -35,5 +36,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'productos', component: ProductosComponent },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'chat-admin', component: ChatAdminComponent, canActivate: [authGuard, adminGuard] },
   { path: 'auth/callback', component: DashboardComponent, canActivate: [authGuard] },
 ];

@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 // import { MsalService } from '@azure/msal-angular';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
+import { ChatWidgetComponent } from './components/chat-widget/chat-widget.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,7 @@ import { HeaderComponent } from './components/header/header.component';
     CommonModule,
     RouterOutlet,
     HeaderComponent,
+    ChatWidgetComponent,
   ],
   template: `
     <app-header></app-header>
@@ -24,6 +27,7 @@ import { HeaderComponent } from './components/header/header.component';
         <router-outlet></router-outlet>
       </div>
     </main>
+    <app-chat-widget *ngIf="(sesion$ | async)?.rol === 'USER'"></app-chat-widget>
   `,
   styles: [`
     main {
@@ -60,4 +64,8 @@ import { HeaderComponent } from './components/header/header.component';
 //     });
 //   }
 // }
-export class AppComponent {}
+export class AppComponent {
+  readonly sesion$ = this.authService.sesion$;
+
+  constructor(private authService: AuthService) {}
+}

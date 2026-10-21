@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   apiUrl: '/api/v1',
+  chatApiUrl: '/chat-api',
+  chatWsUrl: '/chat-ws',
   // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
   // msal: {
   //   clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e',

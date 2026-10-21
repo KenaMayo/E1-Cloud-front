@@ -34,6 +34,9 @@ import { AuthService } from '../../services/auth.service';
           <button *ngIf="esAdmin" class="nav-btn" routerLink="/usuarios" routerLinkActive="active">
             Usuarios
           </button>
+          <button *ngIf="esAdmin" class="nav-btn" routerLink="/chat-admin" routerLinkActive="active">
+            Chat
+          </button>
         </nav>
 
         <div class="auth">

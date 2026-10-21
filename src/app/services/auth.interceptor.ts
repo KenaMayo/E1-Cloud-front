@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.token;
-  const esApi = req.url.startsWith(environment.apiUrl);
+  const esApi = req.url.startsWith(environment.apiUrl) || req.url.startsWith(environment.chatApiUrl);
   const esLogin = req.url.endsWith('/auth/login');
 
   const peticion = token && esApi && !esLogin
