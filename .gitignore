@@ -25,8 +25,10 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-environment-prod.ts
-environment.ts
+
+# Environment - Angular
+/src/environments/environment.ts
+/src/environments/environment.prod.ts
 
 # Logs
 npm-debug.log*
