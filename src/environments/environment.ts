@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api/v1',
-  chatApiUrl: 'http://localhost:8083/api/v1',
-  chatWsUrl: 'ws://localhost:8083/api/v1/ws',
+  apiUrl: 'http://ec2-107-22-91-241.compute-1.amazonaws.com:8080/api/v1',
+  chatApiUrl: 'http://ec2-107-22-91-241.compute-1.amazonaws.com:8083/api/v1',
+  chatWsUrl: 'ws://ec2-107-22-91-241.compute-1.amazonaws.com:8083/api/v1/ws',
   // [MSAL-DISABLED] motivo: fallas en Azure, pendiente soporte Microsoft
   // msal: {
   //   clientId: '8585e392-e8ba-489f-b8b5-dcb65c37004e',
